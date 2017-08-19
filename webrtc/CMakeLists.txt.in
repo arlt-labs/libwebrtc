@@ -10,15 +10,6 @@ endif (WIN32)
 
 include(LibWebRTCExecute)
 
-libwebrtc_execute(
-    COMMAND ${GIT_EXECUTABLE} checkout ${WEBRTC_REVISION}
-    OUTPUT_VARIABLE _WEBRTC_CHECKOUT
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    STAMPFILE webrtc-checkout-commit
-    STATUS "Checking out webrtc to commit ${WEBRTC_REVISION}"
-    ERROR "Unable to checkout webrtc to commit ${WEBRTC_REVISION}"
-)
-
 include(DepotTools)
 include(GClient)
 include(Environment)
