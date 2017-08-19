@@ -8,11 +8,16 @@ cmake_policy(SET CMP0057 NEW)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
     ${CMAKE_SOURCE_DIR}/CMakeModules)
 
+# default webrtc branch to be built
+set(LIBWEBRTC_WEBRTC_HEAD refs/branch-heads/58)
+set(LIBWEBRTC_WEBRTC_GIT https://chromium.googlesource.com/external/webrtc)
+
 find_package(Git REQUIRED)
 
 include(FindLibraries)
-include(Version)
 include(Options)
+include(VersionWebRTC)
+include(Version)
 include(TargetOsAndCpu)
 
 if (HAS_OWN_DEPOT_TOOLS)
@@ -58,25 +63,18 @@ set(_WEBRTC_CMAKE_ARGS
     -DHAS_OWN_DEPOT_TOOLS:PATH=${HAS_OWN_DEPOT_TOOLS}
     -DTARGET_CPU=${TARGET_CPU}
     -DTARGET_OS=${TARGET_OS}
-    -DWEBRTC_PARENT_DIR:PATH=${CMAKE_BINARY_DIR}/webrtc)
+    -DWEBRTC_PARENT_DIR:PATH=${CMAKE_BINARY_DIR}/webrtc
+    -DWEBRTC_REVISION=${LIBWEBRTC_WEBRTC_REVISION})
 
 if (BUILD_TESTS)
   set(_WEBRTC_CMAKE_ARGS ${_WEBRTC_CMAKE_ARGS} -DBUILD_TESTS=${BUILD_TESTS})
 endif (BUILD_TESTS)
 
-if (WEBRTC_BRANCH_HEAD)
-  set(_WEBRTC_CMAKE_ARGS ${_WEBRTC_CMAKE_ARGS} -DWEBRTC_BRANCH_HEAD=${WEBRTC_BRANCH_HEAD})
-endif (WEBRTC_BRANCH_HEAD)
-
-if (WEBRTC_REVISION)
-  set(_WEBRTC_CMAKE_ARGS ${_WEBRTC_CMAKE_ARGS} -DWEBRTC_REVISION=${WEBRTC_REVISION})
-endif (WEBRTC_REVISION)
-
 ExternalProject_Add(
     webrtc-src
 
     DEPENDS ${_NEXT_DEPENDS}
-    GIT_REPOSITORY https://chromium.googlesource.com/external/webrtc
+    GIT_REPOSITORY ${LIBWEBRTC_WEBRTC_GIT}
 
     PREFIX ${CMAKE_BINARY_DIR}/webrtc
     BINARY_DIR ${CMAKE_BINARY_DIR}/webrtc/build
