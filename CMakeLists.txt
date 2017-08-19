@@ -81,7 +81,7 @@ ExternalProject_Add(
     STAMP_DIR ${CMAKE_BINARY_DIR}/webrtc/stamp
     TMP_DIR ${CMAKE_BINARY_DIR}/webrtc/tmp
 
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/webrtc/CMakeLists.txt.in ${CMAKE_BINARY_DIR}/webrtc-version/CMakeLists.txt
+    PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/webrtc/CMakeLists.txt.in ${CMAKE_BINARY_DIR}/webrtc/src/CMakeLists.txt
     UPDATE_COMMAND ""
     INSTALL_COMMAND ""
 
