@@ -77,7 +77,7 @@ ExternalProject_Add(
 
     PREFIX ${CMAKE_BINARY_DIR}/webrtc
     BINARY_DIR ${CMAKE_BINARY_DIR}/webrtc/build
-    SOURCE_DIR ${CMAKE_BINARY_DIR}/webrtc-version
+    SOURCE_DIR ${CMAKE_BINARY_DIR}/webrtc/src
     STAMP_DIR ${CMAKE_BINARY_DIR}/webrtc/stamp
     TMP_DIR ${CMAKE_BINARY_DIR}/webrtc/tmp
 
