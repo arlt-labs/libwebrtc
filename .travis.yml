@@ -1,15 +1,13 @@
+language: cpp
+
 matrix:
   include:
     - os: linux
-      sudo: required
-      env: TARGET_CPU=x64
+      dist: trusty
+      env: TARGET_CPU=x64 VERS=57
       addons:
         apt: &x64-apt
-          sources:
-          - ubuntu-toolchain-r-test
           packages:
-          - gcc-4.8
-          - g++-4.8
           - libglib2.0-dev
           - libgtk2.0-dev
           - libxtst-dev
@@ -24,24 +22,58 @@ matrix:
           - libudev-dev
 
     - os: linux
-      sudo: required
-      env: TARGET_CPU=x64 CMAKE_BUILD_TYPE=Debug
+      dist: trusty
+      env: TARGET_CPU=x64 VERS=57 CMAKE_BUILD_TYPE=Debug
+      addons:
+        apt: *x64-apt
+
+    - os: linux
+      dist: trusty
+      env: TARGET_CPU=x64 VERS=58 CMAKE_BUILD_TYPE=Debug
+      addons:
+        apt: *x64-apt
+
+    - os: linux
+      dist: trusty
+      env: TARGET_CPU=x64 VERS=59 CMAKE_BUILD_TYPE=Debug
+      addons:
+        apt: *x64-apt
+
+    - os: linux
+      dist: trusty
+      env: TARGET_CPU=x64 VERS=60 CMAKE_BUILD_TYPE=Debug
+      addons:
+        apt: *x64-apt
+
+    - os: linux
+      dist: trusty
+      env: TARGET_CPU=x64 VERS=61 CMAKE_BUILD_TYPE=Debug
       addons:
         apt: *x64-apt
 
     - os: osx
       osx_image: xcode7.3
-      env: TARGET_CPU=x64
-      addons:
-        apt: *x64-apt
+      env: TARGET_CPU=x64 VERS=57
 
     - os: osx
       osx_image: xcode7.3
-      env: TARGET_CPU=x64 CMAKE_BUILD_TYPE=Debug
-      addons:
-        apt: *x64-apt
+      env: TARGET_CPU=x64 VERS=57 CMAKE_BUILD_TYPE=Debug
 
-language: cpp
+    - os: osx
+      osx_image: xcode7.3
+      env: TARGET_CPU=x64 VERS=58 CMAKE_BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode7.3
+      env: TARGET_CPU=x64 VERS=59 CMAKE_BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode7.3
+      env: TARGET_CPU=x64 VERS=60 CMAKE_BUILD_TYPE=Debug
+
+    - os: osx
+      osx_image: xcode7.3
+      env: TARGET_CPU=x64 VERS=61 CMAKE_BUILD_TYPE=Debug
 
 before_install:
 - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
@@ -51,7 +83,6 @@ before_install:
     CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.2-Linux-x86_64.tar.gz"
     mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
     export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    export CXX="g++-4.8" CC="gcc-4.8"
   else
     if ! brew ls --version cmake &>/dev/null; then brew update && brew install cmake; fi
   fi
@@ -63,7 +94,7 @@ install:
 - git submodule update
 - mkdir out
 - cd out
-- cmake -DBUILD_SAMPLE=1 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=. -DTARGET_CPU=$TARGET_CPU ..
+- cmake -DWEBRTC_BRANCH_HEAD=$VERS -DBUILD_SAMPLE=1 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=. -DTARGET_CPU=$TARGET_CPU ..
 
 script:
 - make -j 4 package
