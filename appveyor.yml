@@ -1,5 +1,8 @@
 os: Visual Studio 2015
 
+environment:
+  GYP_MSVS_VERSION: 2015
+
 matrix:
   fast_finish: true
 
