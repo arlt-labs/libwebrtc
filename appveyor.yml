@@ -1,7 +1,4 @@
-os: Visual Studio 2015
-
-environment:
-  GYP_MSVS_VERSION: 2015
+os: Visual Studio 2017
 
 matrix:
   fast_finish: true
@@ -18,8 +15,8 @@ clone_folder: c:\projects\libwebrtc
 
 before_build:
   - cd c:\projects\libwebrtc
-  - if "%platform%"=="x86" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015
-  - if "%platform%"=="x64" set CMAKE_GENERATOR_NAME=Visual Studio 14 2015 Win64
+  - if "%platform%"=="x86" set CMAKE_GENERATOR_NAME=Visual Studio 15 2017
+  - if "%platform%"=="x64" set CMAKE_GENERATOR_NAME=Visual Studio 15 2017 Win64
   - cmake -G "%CMAKE_GENERATOR_NAME%" -DBUILD_SAMPLE=1 -DCMAKE_BUILD_TYPE=%configuration% -DCMAKE_INSTALL_PREFIX=c:\projects\libwebrtc .
 
 build:
