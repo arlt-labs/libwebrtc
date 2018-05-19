@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-#include <webrtc/api/peerconnectioninterface.h>
-#include <webrtc/base/ssladapter.h>
-#include <webrtc/base/thread.h>
+#include <api/peerconnectioninterface.h>
+#include "api/audio_codecs/builtin_audio_decoder_factory.h"
+#include "api/audio_codecs/builtin_audio_encoder_factory.h"
+#include <rtc_base/ssladapter.h>
+#include <rtc_base/thread.h>
 
 #ifdef WIN32
-#include <webrtc/base/win32socketinit.h>
-#include <webrtc/base/win32socketserver.h>
+#include <rtc_base/win32socketinit.h>
+#include <rtc_base/win32socketserver.h>
 #include <Windows.h>
 #endif
 
@@ -36,20 +38,27 @@ int main(int argc, char **argv) {
   rtc::InitRandom(rtc::Time());
   rtc::ThreadManager::Instance()->WrapCurrentThread();
 
+  rtc::Thread *networkThread = new rtc::Thread();
   rtc::Thread *signalingThread = new rtc::Thread();
   rtc::Thread *workerThread = new rtc::Thread();
 
+  networkThread->SetName("network_thread", NULL);
   signalingThread->SetName("signaling_thread", NULL);
   workerThread->SetName("worker_thread", NULL);
 
-  if (!signalingThread->Start() || !workerThread->Start()) {
+  if (!networkThread->Start() || !signalingThread->Start() || !workerThread->Start()) {
     return 1;
   }
 
   rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> pcFactory =
-      webrtc::CreatePeerConnectionFactory(signalingThread,
+      webrtc::CreatePeerConnectionFactory(networkThread,
+                                          signalingThread,
                                           workerThread,
-                                          NULL, NULL, NULL);
+                                          nullptr /* default_adm */,
+                                          webrtc::CreateBuiltinAudioEncoderFactory(),
+                                          webrtc::CreateBuiltinAudioDecoderFactory(),
+                                          nullptr /* video_encoder_factory */,
+                                          nullptr /* video_decoder_factory */);
 
   pcFactory = NULL;
 
@@ -59,9 +68,11 @@ int main(int argc, char **argv) {
 
   signalingThread->Stop();
   workerThread->Stop();
+  networkThread->Stop();
 
   delete signalingThread;
   delete workerThread;
+  delete networkThread;
 
   rtc::CleanupSSL();
   return 0;

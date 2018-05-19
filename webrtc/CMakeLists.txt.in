@@ -109,7 +109,7 @@ libwebrtc_command(
 set(_NINJA_COMMAND ninja ${NINJA_ARGS} -C ${_NINJA_BUILD_DIR} webrtc system_wrappers_default)
 
 if (BUILD_TESTS)
-  set(_NINJA_COMMAND ${_NINJA_COMMAND} webrtc_tests)
+  set(_NINJA_COMMAND ${_NINJA_COMMAND} test)
 endif (BUILD_TESTS)
 
 libwebrtc_command(

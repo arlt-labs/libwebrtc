@@ -41,9 +41,28 @@ set_target_properties(webrtc PROPERTIES
 
 #
 # Install headers
-install(DIRECTORY ${WEBRTC_SOURCE_DIR}
+install(DIRECTORY ${WEBRTC_SOURCE_DIR}/api
         DESTINATION "include"
         FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${WEBRTC_SOURCE_DIR}/logging
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${WEBRTC_SOURCE_DIR}/media
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${WEBRTC_SOURCE_DIR}/modules
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${WEBRTC_SOURCE_DIR}/p2p
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY ${WEBRTC_SOURCE_DIR}/rtc_base
+        DESTINATION "include"
+        FILES_MATCHING PATTERN "*.h")
+install(FILES ${WEBRTC_SOURCE_DIR}/typedefs.h
+        DESTINATION "include")
+install(FILES ${WEBRTC_SOURCE_DIR}/common_types.h
+        DESTINATION "include")
 
 #
 # Install library
