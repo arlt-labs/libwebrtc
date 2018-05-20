@@ -22,6 +22,7 @@ matrix:
         - libasound2-dev
         - libpulse-dev
         - libudev-dev
+        - libc++-dev
   - os: linux
     dist: trusty
     sudo: required
