@@ -15,8 +15,9 @@
  */
 
 #include <api/peerconnectioninterface.h>
-#include "api/audio_codecs/builtin_audio_decoder_factory.h"
-#include "api/audio_codecs/builtin_audio_encoder_factory.h"
+#include <api/audio_codecs/builtin_audio_decoder_factory.h>
+#include <api/audio_codecs/builtin_audio_encoder_factory.h>
+#include <modules/audio_device/include/audio_device.h>
 #include <rtc_base/ssladapter.h>
 #include <rtc_base/thread.h>
 
@@ -38,41 +39,17 @@ int main(int argc, char **argv) {
   rtc::InitRandom(rtc::Time());
   rtc::ThreadManager::Instance()->WrapCurrentThread();
 
-  rtc::Thread *networkThread = new rtc::Thread();
-  rtc::Thread *signalingThread = new rtc::Thread();
-  rtc::Thread *workerThread = new rtc::Thread();
-
-  networkThread->SetName("network_thread", NULL);
-  signalingThread->SetName("signaling_thread", NULL);
-  workerThread->SetName("worker_thread", NULL);
-
-  if (!networkThread->Start() || !signalingThread->Start() || !workerThread->Start()) {
-    return 1;
-  }
-
   rtc::scoped_refptr<webrtc::PeerConnectionFactoryInterface> pcFactory =
-      webrtc::CreatePeerConnectionFactory(networkThread,
-                                          signalingThread,
-                                          workerThread,
-                                          nullptr /* default_adm */,
+      webrtc::CreatePeerConnectionFactory(NULL,
+                                          rtc::Thread::Current(),
+                                          NULL,
+                                          webrtc::AudioDeviceModule::Create(0, webrtc::AudioDeviceModule::kDummyAudio),
                                           webrtc::CreateBuiltinAudioEncoderFactory(),
                                           webrtc::CreateBuiltinAudioDecoderFactory(),
                                           nullptr /* video_encoder_factory */,
                                           nullptr /* video_decoder_factory */);
 
   pcFactory = NULL;
-
-  if (rtc::ThreadManager::Instance()->CurrentThread() == signalingThread) {
-    rtc::ThreadManager::Instance()->SetCurrentThread(NULL);
-  }
-
-  signalingThread->Stop();
-  workerThread->Stop();
-  networkThread->Stop();
-
-  delete signalingThread;
-  delete workerThread;
-  delete networkThread;
 
   rtc::CleanupSSL();
   return 0;
