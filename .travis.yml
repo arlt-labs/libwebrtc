@@ -117,17 +117,5 @@ install:
 
 script:
 - make -j 4 package
-
-before_deploy:
-- export TRAVIS_ARTIFACTS=$(ls libwebrtc-*.tar.gz)
-
-deploy:
-  provider: releases
-  api_key:
-    secure: "rZsKJiH11w/YAOQN5P1hfRsl83C7jgZpAgEfbZHh1ShaXQgA5cNe4ySOha7bn4BiWqbf7N2tQLovyatxy7hy2ef0QcWlU8aNjaAWE/Tzjy+hHvWD2Q2Q+dpKDp0+ZDHxIt8hjvLJsnxk8pkLI0zJsU20LH6TFVpyxSLwrj+iADxL4FI69Jh1HnbVwHBKOVrcGjTSXughRDXJ7VNYw6K1eg+D8x5d3jtsYg8TGpGYdhR9AaQIcvQo7octLavs0FesxDgJyczRMpGhxzGd9+VC970s+NSgrcKBIl3Yi9WqI06+5bolR3fbR4Hm3kaQzQVg5WMLRzGOWnDKDm30FzFruG+8MqdMyy0rUfzkcMPbhddDrVWnC929TsIsgrcr1TXpfp+YVShgon6siMJH21Wa1BM+Al1qf5HNjb/LlfRiJkoXdl4tLkvDzHve9vvpbaXzYC9/0whHi0W5f7oKmMtSnVtMyRxEvTMInImmMTcSwxi2EkeG9ts3fda22XUeb96qzck+9DVBZlMHkFMY3FAOhzF7xO9OB0m0olCL26nD7LU2uI5F9fdeOh0hkErRRAuxApqFav7r8t0CXCTLvZw6FzGgOCGj0LCg91z4ocpv9wQ+n0ZSbNVZLZkThmZnnstFo3gQk6mu5l4k82qUXRwLh7wf6UwJIeTgTIvejam2s8M="
-  file_glob: true
-  file: "${TRAVIS_ARTIFACTS}"
-  skip_cleanup: true
-  on:
-    tags: true
-    repo: mayeut/libwebrtc
+artifacts:
+- libwebrtc-*.tar.gz
