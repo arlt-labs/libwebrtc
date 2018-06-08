@@ -92,6 +92,9 @@ matrix:
     env: TARGET_CPU=x64
   - os: osx
     osx_image: xcode8.3
+    env: TARGET_CPU=x86
+  - os: osx
+    osx_image: xcode8.3
     env: TARGET_CPU=x64 CMAKE_BUILD_TYPE=Debug
 
 before_install:
@@ -115,7 +118,8 @@ install:
 - cd out
 - cmake -DBUILD_SAMPLE=1 -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=. -DTARGET_CPU=$TARGET_CPU ..
 
-script:
-- make -j 4 package
-artifacts:
-- libwebrtc-*.tar.gz
+addons:
+  artifacts:
+    paths:
+      - /**/libwebrtc-*.tar.gz
+    debug: true
