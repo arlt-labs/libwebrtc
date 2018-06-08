@@ -9,7 +9,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
     ${CMAKE_SOURCE_DIR}/CMakeModules)
 
 # default webrtc branch to be built
-set(LIBWEBRTC_WEBRTC_HEAD refs/branch-heads/67)
+set(LIBWEBRTC_WEBRTC_HEAD refs/branch-heads/65)
 set(LIBWEBRTC_WEBRTC_GIT https://chromium.googlesource.com/external/webrtc)
 
 find_package(Git REQUIRED)
